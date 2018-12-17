@@ -1,0 +1,36 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Install dependencies",
+            "type": "shell",
+            "command": "pip install watchdog && install pyinstaller && pip install pytest",
+        },
+        {
+            "label": "Build FallCube_Client",
+            "type": "shell",
+            "command": "pyinstaller --onefile ${workspaceRoot}/FallCube_Client/project/main.py --name FallCube_Client",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run FallCube_Client",
+            "type": "shell",
+            "command": "py ${workspaceRoot}/FallCube_Client/project/main.py",
+            "args": [
+                "${workspaceRoot}/FallCube_Client/Test_Input_Dir",
+                "127.0.0.1",
+                "12345"
+            ]
+        },
+        {
+            "label": "Run Tests",
+            "type": "shell",
+            "command": "pytest -v"
+        }
+    ]
+}

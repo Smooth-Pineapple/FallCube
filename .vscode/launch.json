@@ -1,0 +1,16 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debug FallCube_Client",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceRoot}/FallCube_Client/project/main.py",
+            "console": "integratedTerminal",
+            "args": ["${workspaceRoot}/FallCube_Client/Test_Input_Dir", "127.0.0.1", "12345"] 
+        }
+    ]
+}
