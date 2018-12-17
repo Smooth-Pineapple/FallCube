@@ -12,5 +12,5 @@ class ScanOnce(FileTracking):
           else:
             self._relevant_path_stripper('created', path, '')
 
-    except IOError:
-      print("An error occured trying to read the file.")
+    except IOError as e:
+      print("An error occured trying to read the file:", e)

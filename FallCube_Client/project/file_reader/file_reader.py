@@ -7,7 +7,7 @@ class FileReader:
         self.__file = None
       
     @classmethod
-    def from_path(cls, path, size): 
+    def from_valid_path(cls, path, size): 
         if os.path.isfile(path):
             return cls(path, size)
         else:
