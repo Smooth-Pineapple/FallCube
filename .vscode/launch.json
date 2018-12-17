@@ -11,6 +11,14 @@
             "program": "${workspaceRoot}/FallCube_Client/project/main.py",
             "console": "integratedTerminal",
             "args": ["${workspaceRoot}/FallCube_Client/Test_Input_Dir", "127.0.0.1", "12345"] 
+        },
+        {
+            "name": "Python Debug FallCube_Server",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceRoot}/FallCube_Server/project/main.py",
+            "console": "integratedTerminal",
+            "args": ["${workspaceRoot}/FallCube_Server/Test_Output_Dir", "127.0.0.1", "12345"] 
         }
     ]
 }

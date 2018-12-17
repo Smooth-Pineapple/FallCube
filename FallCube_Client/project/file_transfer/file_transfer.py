@@ -1,3 +1,4 @@
+import os 
 import sys
 import socket
 
@@ -15,26 +16,30 @@ class FileTransfer():
     
         if self.__data_sender.is_closed() == False:
             try:
-                self.__data_sender.connect(event)
+                self.__data_sender.notify(event)
                 if file != '':
-                    file_to_parse = FileReader.from_valid_path(self.__base_dir + dir + '/' + file, 1024)
-                    if file_to_parse != None:
-                        r = file_to_parse.init_read()
-                        while r:
-                            self.__data_sender.send(r)
-                            r = file_to_parse.read()
-                        file_to_parse.close()
+                    file_to_parse = open(self.__base_dir + dir + '/' + file, 'rb')
+                    self.__data_sender.send_data(file_to_parse)
+                    file_to_parse.close()
+                else:
+                    self.__data_sender.send_msg(dir)
+
+            except FileNotFoundError as e:
+                print("File not found:", e)
+                self.__data_sender.close()   
+            except socket.timeout as e:
+                print("Socket timeout:", e)
+                self.__data_sender.close()   
             except socket.error as e:
                 print("Error in socket connection:", e)
-                self.close()  
+                self.__data_sender.close()    
             except socket.gaierror as e:
                 print("Error with address:", e)       
-                self.close()  
+                self.__data_sender.close()    
             except:
                 print("Unexpected error:", sys.exc_info()[0])    
-                self.close()               
+                self.__data_sender.close()                
         else:
             print("Socket is closed")
 
-    def close(self):
-        self.__data_sender.close()   
+        

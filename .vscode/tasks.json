@@ -6,16 +6,44 @@
         {
             "label": "Install dependencies",
             "type": "shell",
-            "command": "pip install watchdog && install pyinstaller && pip install pytest",
+            "command": "pip install watchdog && install pyinstaller && pip install pytest"
         },
         {
-            "label": "Build FallCube_Client",
+            "label": "Build All",
             "type": "shell",
-            "command": "pyinstaller --onefile ${workspaceRoot}/FallCube_Client/project/main.py --name FallCube_Client",
+            "dependsOn": [
+                "Build FallCube_Client",
+                "Build FallCube_Server"
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "Run All",
+            "type": "shell",
+            "dependsOn": [
+                "Run FallCube_Client",
+                "Run FallCube_Server"
+            ]
+        },
+        {
+            "label": "Test All",
+            "type": "shell",
+            "dependsOn": [
+                "Test FallCube_Client",
+                "Test FallCube_Server"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build FallCube_Client",
+            "type": "shell",
+            "command": "pyinstaller --onefile ${workspaceRoot}/FallCube_Client/project/main.py --name FallCube_Client"
         },
         {
             "label": "Run FallCube_Client",
@@ -25,12 +53,33 @@
                 "${workspaceRoot}/FallCube_Client/Test_Input_Dir",
                 "127.0.0.1",
                 "12345"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Test FallCube_Client",
+            "type": "shell",
+            "command": "pytest ${workspaceRoot}/FallCube_Client/ -v"
+        },
+        {
+            "label": "Build FallCube_Server",
+            "type": "shell",
+            "command": "pyinstaller --onefile ${workspaceRoot}/FallCube_Server/project/main.py --name FallCube_Server"
+        },
+        {
+            "label": "Run FallCube_Server",
+            "type": "shell",
+            "command": "py ${workspaceRoot}/FallCube_Server/project/main.py",
+            "args": [
+                "${workspaceRoot}/FallCube_Server/Test_Output_Dir",
+                "127.0.0.1",
+                "12345"
             ]
         },
         {
-            "label": "Run Tests",
+            "label": "Test FallCube_Server",
             "type": "shell",
-            "command": "pytest -v"
+            "command": "pytest ${workspaceRoot}/FallCube_Server/ -v"
         }
     ]
 }

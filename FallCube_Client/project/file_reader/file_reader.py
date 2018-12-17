@@ -1,29 +1,22 @@
 import os 
 
 class FileReader: 
-    def __init__(self, path, size): 
+    def __init__(self, path): 
         self.__path = path 
-        self.__size = size 
         self.__file = None
       
     @classmethod
-    def from_valid_path(cls, path, size): 
+    def from_valid_path(cls, path): 
         if os.path.isfile(path):
-            return cls(path, size)
+            return cls(path)
         else:
             return None
 
-    def init_read(self):
+    def open(self):
         self.__file = open(self.__path, 'rb')
 
-        return self.__file.read(self.__size)
+        return self.__file
 
-    def read(self):
-        if self.__file != None:
-            return self.__file.read(self.__size)
-        else:
-            return None
-        
     def close(self):
         if self.__file != None:
             self.__file.close
