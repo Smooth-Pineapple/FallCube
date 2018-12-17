@@ -15,9 +15,11 @@ class MonitorHandle(FileSystemEventHandler):
             pof = os.path.basename(path_old_file)
 
         if isDir == False:
-            self.__callBack(eType, os.path.dirname(path_dir), os.path.basename(path_file), pof)
+            eType = eType + ',file'
         else:
-            self.__callBack(eType, path_dir, '', pof)
+            eType = eType + ',dir'
+
+        self.__callBack(eType, os.path.dirname(path_dir), os.path.basename(path_file), pof)
 
     def on_created(self, event): 
         file_stat = os.stat(event.src_path)
@@ -28,6 +30,7 @@ class MonitorHandle(FileSystemEventHandler):
         self.__mod_times[event.src_path] = mod_time
         
     def on_deleted(self, event): 
+        # Delete event registers directory as file
         self.__handle_event(event.is_directory, event.event_type, event.src_path, event.src_path)
 
     def on_modified(self, event):

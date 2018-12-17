@@ -19,8 +19,7 @@ def main():
     file_tracker = [ScanOnce(sys.argv[1], file_transfer.transfer), Monitor(sys.argv[1],  file_transfer.transfer)]
     for tracker in file_tracker:
         tracker.run()
-
-    file_transfer.close()
+        
     # parse dir
     # send each file to serv
     # monitor dir

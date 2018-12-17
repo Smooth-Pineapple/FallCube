@@ -18,14 +18,18 @@ class FileTransfer():
                     if client_socket is not None:
                         print('receiving data...')
                         data = client_socket.recv(1024)
-                        print('data=%s mode', (data))
+                        print(data.decode())
+                        #if create and exists NO
+                        #else if modified or create YES
+                        #else if delete and exists YES
+                        #else if move and not exists NO
+                        #else if move and exists YES
+                        #else NO
                         client_socket.send('ok'.encode())
-
-                        data = client_socket.recv(1024)
-                        print('data=%s', (data))  
+ 
                         while data:
                             data = client_socket.recv(1024)
-                            print('data=%s', (data))   
+                            print(data.decode()) 
 
             except socket.error as e:
                 print("Error in socket connection:", e)
