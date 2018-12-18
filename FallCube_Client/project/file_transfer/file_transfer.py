@@ -12,18 +12,19 @@ class FileTransfer():
 
     def transfer(self, event, dir, file):
         data_sender = DataSender(self.__host, self.__port)
-        print(event, dir, file)
     
         if data_sender.is_closed() == False:
             try:
                 to_file = dir + os.sep + file
-                data_sender.notify((event + ',' + to_file))
-                if event == 'created,file' or event == 'modified,file':
-                    file_to_parse = open(self.__base_dir + to_file, 'rb')
-                    data_sender.send_data(file_to_parse)
-                    file_to_parse.close()
-                else:
-                    data_sender.send_msg(file.encode())
+                print(event, to_file)
+                server_response = data_sender.notify((event + ',' + to_file))
+                if server_response == 'ok':
+                    if event == 'created,file' or event == 'modified,file':
+                        file_to_parse = open(self.__base_dir + to_file, 'rb')
+                        data_sender.send_data(file_to_parse)
+                        file_to_parse.close()
+                    else:
+                        data_sender.send_msg(file.encode())
 
             except FileNotFoundError as e:
                 print("File not found:", e)   

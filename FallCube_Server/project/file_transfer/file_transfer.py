@@ -2,6 +2,7 @@ import sys
 import socket
 
 from file_transfer.data_receiver import DataReceiver
+from file_sync.file_sync import FileSync
 
 class FileTransfer():
     def __init__(self, dir, host, port):
@@ -12,20 +13,16 @@ class FileTransfer():
         if self.__data_receiver.is_closed() == False:
             try:
                 self.__data_receiver.connect()
+                file_sync = FileSync(self.__base_dir)
+
                 while True:
                     client_socket = self.__data_receiver.accept()[0]
 
                     if client_socket is not None:
-                        print('receiving data...')
                         data = client_socket.recv(1024)
-                        print(data.decode())
-                        #if create and exists NO
-                        #else if modified or create YES
-                        #else if delete and exists YES
-                        #else if move and not exists NO
-                        #else if move and exists YES
-                        #else NO
-                        client_socket.send('ok'.encode())
+                        server_response = file_sync.set_sync_method(data.decode())
+
+                        client_socket.send(server_response.encode())
  
                         while data:
                             data = client_socket.recv(1024)
