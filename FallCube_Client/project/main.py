@@ -11,7 +11,7 @@ from file_transfer.file_transfer import FileTransfer
 def main():
     # Ensure valid usage
     if len(sys.argv) < 4 or sys.argv[1] == '-h' or not sys.argv[3].isnumeric():
-        print("Usage:", os.path.basename(__file__), "monitor_dir server_path server_port\n")
+        print("Usage:", os.path.basename(__file__), "sync_with_dir server_path server_port\n")
       
         return 
 

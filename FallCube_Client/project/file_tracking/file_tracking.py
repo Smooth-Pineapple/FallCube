@@ -1,6 +1,8 @@
+from abc import ABC, abstractmethod
+ 
 import os
 
-class FileTracking:
+class FileTracking(ABC):
   def __init__(self, dir, callBack):
     self._dir = dir
     self.__callBack = callBack
@@ -13,5 +15,6 @@ class FileTracking:
     else:
       self.__callBack(action, relevant_path, file)
 
+  @abstractmethod
   def run(self):
     raise NotImplementedError("Subclass must implement abstract method")

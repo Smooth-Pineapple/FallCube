@@ -1,11 +1,13 @@
 import os 
 
-class FileSync: 
+from sync.sync import Sync
+
+class FileIOSync(Sync): 
     def __init__(self, dir):
         self.__download_dir = dir
         self.__file = None
 
-    def set_sync_method(self, mode, file_type, remote_file, new_name = None):
+    def set_sync_action(self, mode, file_type, remote_file, new_name = None):
         print(mode, file_type, remote_file, new_name)
 
         response = ''
@@ -13,38 +15,27 @@ class FileSync:
             response = 'end'
         elif mode == 'created' and os.path.exists(self.__download_dir + remote_file):
             response = 'end'
-        elif mode == 'created':
-            if file_type == 'file':
-                response = 'read'
-            else:
-                response = 'create'    
-        elif mode == 'modified':
-            response = 'read'
-        elif mode == 'moved':
-            response = 'rename'    
-        elif mode == 'deleted':
-            response = 'remove'
         else:
-            response = 'err'
+            response = super().set_sync_action(mode, file_type, remote_file, new_name)
 
         return response
 
-
-    def create_and_open_file(self, path):
+    def set_file_sync(self, path):
         if not self.__file:
             self.__file = open(self.__download_dir + path, 'wb+')
 
-    def write_to_file(self, data):
+    def sync_file_data(self, data):
         if self.__file:
             self.__file.write(data)
 
-    def close_file(self):
+    def finished_file_sync(self):
         if self.__file:
-            self.__file.close()        
+            self.__file.close() 
+            self.__file = None       
 
-    def create_dir(self, path):
+    def sync_dir(self, path):
         os.makedirs(self.__download_dir + path)
 
     def __del__(self):
-        self.close_file()
+        self.finished_file_sync()
         
