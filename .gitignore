@@ -1,8 +1,5 @@
-/build
-/dist
-/*.spec
-/FallCube_Client/project/__pycache__
-/FallCube_Client/project/file_reader/__pycache__
-/FallCube_Client/project/file_tracking/__pycache__
-/FallCube_Client/project/file_transfer/__pycache__
-/FallCube_Client/project/test/__pycache__
+*.spec
+*.pyc
+
+build/
+dist/

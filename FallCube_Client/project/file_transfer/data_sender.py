@@ -16,7 +16,7 @@ class DataSender():
             response = self.__socket.recv(1024)
             print(response.decode())
 
-            if 'ok' != response.decode() and 'no' != response.decode():
+            if 'err' == response.decode():
                 raise socket.error('Recieved unexpected data from server')
             
             return response.decode()
