@@ -21,5 +21,5 @@ class Monitor(FileTracking):
         self.__observer.stop()
 
       self.__observer.join()
-    except IOError:
+    except OSError:
       print("An error occured trying to read the file.")

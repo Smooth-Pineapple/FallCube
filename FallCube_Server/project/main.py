@@ -18,8 +18,8 @@ def main():
         else:
             print("Directory does not exist, so will make it")
             os.makedirs(sys.argv[1])
-    except IOError as e:
-        print("IOError error:", e)
+    except OSError as e:
+        print("OSError error:", e)
         
     file_transfer = FileTransfer(sys.argv[1], sys.argv[2], sys.argv[3])
     file_transfer.run()

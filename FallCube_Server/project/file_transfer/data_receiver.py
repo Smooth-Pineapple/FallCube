@@ -22,6 +22,3 @@ class DataReceiver():
         if self.__closed_socket == False: 
             self.__socket.close()   
             self.__closed_socket = True
-
-    def is_closed(self): 
-        return self.__closed_socket

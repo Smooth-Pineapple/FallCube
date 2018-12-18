@@ -1,4 +1,5 @@
 import os 
+import shutil
 
 from sync.sync import Sync
 
@@ -35,6 +36,23 @@ class FileIOSync(Sync):
 
     def sync_dir(self, path):
         os.makedirs(self.__download_dir + path)
+
+    def sync_delete(self, path):
+        try:
+            shutil.rmtree(self.__download_dir + path)
+        except OSError:
+            os.remove(self.__download_dir + path)
+
+    def sync_rename(self, new, old):
+        new_path = self.__download_dir + os.path.dirname(new)
+        if not os.path.isdir(new_path):
+            os.makedirs(new_path)
+
+        if not os.path.exists(self.__download_dir + new):
+            shutil.move(self.__download_dir + old, self.__download_dir + new)
+        else:
+            if os.path.exists(self.__download_dir + old):
+                os.rmdir(self.__download_dir + old)
 
     def __del__(self):
         self.finished_file_sync()

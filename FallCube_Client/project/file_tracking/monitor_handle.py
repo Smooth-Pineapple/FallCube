@@ -22,9 +22,9 @@ class MonitorHandle(FileSystemEventHandler):
             #    pof = path_old_file
 
             if isDir == False:
-                eType = eType + ',file'
+                eType = eType + '|file'
             else:
-                eType = eType + ',dir'
+                eType = eType + '|dir'
 
             self.__callBack(eType, os.path.dirname(path_dir), os.path.basename(path_file), path_old_file)
 

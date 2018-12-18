@@ -27,5 +27,9 @@ class Sync(ABC):
     def finished_file_sync(self):raise NotImplementedError   
     @abstractmethod
     def sync_dir(self, path):raise NotImplementedError
+    @abstractmethod
+    def sync_delete(self, path):raise NotImplementedError
+    @abstractmethod
+    def sync_rename(self, path):raise NotImplementedError
 
         
