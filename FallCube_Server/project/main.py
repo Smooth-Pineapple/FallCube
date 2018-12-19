@@ -10,7 +10,9 @@ def main():
         print("Usage:", os.path.basename(__file__), "sync_to_dir server_path server_port\n")
       
         return 
+       
     try:
+        # Check that directory which is synced to client, is either empty or doesn't exist(make directory if it doesn't)
         if os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):
             if os.listdir(sys.argv[1]):
                 print("Must provide empty directory!")
@@ -21,6 +23,7 @@ def main():
     except OSError as e:
         print("OSError error:", e)
         
+    # Initialise FileTransfer object with the directory(which will be synced with client) and details(address and port) for the server to run on
     file_transfer = FileTransfer(sys.argv[1], sys.argv[2], sys.argv[3])
     file_transfer.run()
     file_transfer.close()

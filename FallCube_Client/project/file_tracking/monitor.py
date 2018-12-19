@@ -6,13 +6,22 @@ from file_tracking.monitor_handle import MonitorHandle
 from watchdog.observers import Observer
 
 class Monitor(FileTracking):
+  """
+  Implementation of FileTracking class to do a monitor directory for file/ directory changes
+  """
+
   def __init__(self, dir, callBack):
     super().__init__(dir, callBack)
     self.__observer = Observer()
 
   def run(self):
+    """
+    Monitors directory for changes to files/ directories
+    """
+
     try:
-      self.__observer.schedule(MonitorHandle(self._relevant_path_stripper), self._dir, recursive = True)
+      # Monitor directory using MonitorHandle to handle file system changes
+      self.__observer.schedule(MonitorHandle(self._callback_with_relevant_path_stripper), self._dir, recursive = True)
       self.__observer.start()
       try:
         while True:
