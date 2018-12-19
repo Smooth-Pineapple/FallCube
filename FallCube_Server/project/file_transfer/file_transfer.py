@@ -2,10 +2,12 @@ import os
 import sys
 import socket
 
+from threading import Thread
+
 from file_transfer.data_receiver import DataReceiver
 from sync.file_io_sync import FileIOSync
 
-class FileTransfer():
+class FileTransfer(Thread):
     """
     Class that deals with file/ directory event information from client
     """
@@ -17,7 +19,7 @@ class FileTransfer():
             host: host to run on
             port: port to run on
         """
-
+        super().__init__()
         self.__data_receiver = DataReceiver(host, port)
         self.__base_dir = dir
 
