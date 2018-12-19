@@ -24,7 +24,7 @@ class DataSender():
         if self.__closed_socket == False: 
             self.__socket.send(msg.encode())
             response = self.__socket.recv(1024)
-            print("Messge received from server:", response.decode())
+            print("Message received from server:", response.decode())
 
             if 'err' == response.decode():
                 raise socket.error('Recieved unexpected data from server')
@@ -45,3 +45,6 @@ class DataSender():
         if self.__closed_socket == False: 
             self.__socket.close()   
             self.__closed_socket = True
+
+    def __del__(self): 
+        self.close()         

@@ -72,7 +72,6 @@ class FileTransfer():
                         sync.sync_rename(new_name, remote_file)
 
                         print("Renamed:", remote_file, "to:", new_name)  
-
         except OSError as e:
             print("OSError error:", e)                   
         except socket.error as e:
@@ -82,7 +81,7 @@ class FileTransfer():
         except:
             print("Unexpected error:", sys.exc_info()[0])    
         finally:
-            self.close()               
+            self.close() # Explicitly close even though destructor will do it anyway                
 
     def __parse_client_request(self, data):
         """

@@ -34,3 +34,6 @@ class DataReceiver():
         if self.__closed_socket == False: 
             self.__socket.close()   
             self.__closed_socket = True
+
+    def __del__(self): 
+        self.close()     

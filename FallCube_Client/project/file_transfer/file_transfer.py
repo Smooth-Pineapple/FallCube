@@ -44,7 +44,7 @@ class FileTransfer():
             # Message to send to server, format:
                 # [EVENT]|[FILE/DIRECTORY]|[PATH FROM MONITORED DIRECTORY TO FILE/ DIRECTORY]...also can have...|[PATH FROM MONITORED DIRECTORY TO OLD FILE/ DIRECTORY]
             client_msg = event + "|" + to_file
-            print("Messge to send to server:", client_msg)
+            print("Message to send to server:", client_msg)
             
             # Send message and wait for response
             server_response = data_sender.notify(client_msg)
@@ -65,6 +65,6 @@ class FileTransfer():
         except:
             print("Unexpected error:", sys.exc_info()[0])         
         finally:  
-            data_sender.close()           
+            data_sender.close() # Explicitly close even though destructor will do it anyway           
 
         
