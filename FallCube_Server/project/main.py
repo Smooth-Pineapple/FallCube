@@ -27,6 +27,7 @@ def main():
 
     pid = os.getpid()
 
+    # Let user kill server by entering some text
     try:
         # Initialise FileTransfer object with the directory(which will be synced with client) and details(address and port) for the server to run on
         file_transfer = FileTransfer(sys.argv[1], sys.argv[2], sys.argv[3])    

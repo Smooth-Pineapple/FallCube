@@ -1,7 +1,6 @@
 import os
 import sys
 
-from file_tracking.file_tracking import FileTracking
 from file_tracking.monitor import Monitor
 from file_tracking.scan_once import ScanOnce
 

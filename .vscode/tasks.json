@@ -50,7 +50,7 @@
             "type": "shell",
             "command": "py ${workspaceRoot}/FallCube_Client/project/main.py",
             "args": [
-                "${workspaceRoot}/FallCube_Client/project/test/test_input_dir",
+                "${workspaceRoot}/FallCube_Client/project/test/fake_input_dir",
                 "127.0.0.1",
                 "12345"
             ],
@@ -71,7 +71,7 @@
             "type": "shell",
             "command": "py ${workspaceRoot}/FallCube_Server/project/main.py",
             "args": [
-                "${workspaceRoot}/FallCube_Server/project/test/test_output_dir",
+                "${workspaceRoot}/FallCube_Server/project/test/fake_output_dir",
                 "127.0.0.1",
                 "12345"
             ]
