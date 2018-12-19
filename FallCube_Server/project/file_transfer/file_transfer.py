@@ -109,3 +109,6 @@ class FileTransfer(Thread):
 
     def close(self):
         self.__data_receiver.close()   
+
+    def __del__(self):
+        self.close()

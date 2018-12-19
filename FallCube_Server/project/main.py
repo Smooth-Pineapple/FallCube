@@ -1,6 +1,8 @@
 import os
 import sys
 
+import signal
+
 from file_transfer.file_transfer import FileTransfer
 
 # Main entry point
@@ -25,12 +27,14 @@ def main():
 
     pid = os.getpid()
 
-    # Initialise FileTransfer object with the directory(which will be synced with client) and details(address and port) for the server to run on
-    file_transfer = FileTransfer(sys.argv[1], sys.argv[2], sys.argv[3])    
-    file_transfer.start()
+    try:
+        # Initialise FileTransfer object with the directory(which will be synced with client) and details(address and port) for the server to run on
+        file_transfer = FileTransfer(sys.argv[1], sys.argv[2], sys.argv[3])    
+        file_transfer.start()
 
-    input('Socket is listening, press any key to abort...')
-    os.kill(pid,9)    
+        input('Socket is listening, enter any key to abort...\n')
+    finally:
+        os.kill(pid, signal.SIGTERM)    
 
     file_transfer.run()
     file_transfer.close()
