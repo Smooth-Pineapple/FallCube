@@ -52,19 +52,26 @@ class FileTransfer():
                         while data:
                             data = client_socket.recv(1024)
                             sync.sync_file_data(data)
-                            
+
+                        print("Written file:", remote_file)    
                         sync.end_file_sync()   
                     elif server_response == 'create':
                         # A directory has been created
                         sync.sync_dir(remote_file)
 
+                        print("Create directory:", remote_file)  
+                        
                     elif server_response == 'remove':
                         # A file/ directory has been deleted
                         sync.sync_delete(remote_file)
 
+                        print("Deleted:", remote_file)  
+
                     elif server_response == 'rename':
                         # A file/ directory has been renamed
                         sync.sync_rename(new_name, remote_file)
+
+                        print("Renamed:", remote_file, "to:", new_name)  
 
         except OSError as e:
             print("OSError error:", e)                   

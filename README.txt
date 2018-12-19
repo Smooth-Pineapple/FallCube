@@ -1,9 +1,9 @@
 ===========================================
-McLaren Racing
-Code at Home Excercise - Room Booking
+Pexip
+FallCube
 ===========================================
 
-** RoomBooking **
+** FallCube **
 
 This Python program takes two CSV files as input. The first, representing valid rooms to book, and second, listing booking attempts. Then either reserves the room or detects errors/ booking conflicts, and prints the unsuccessful booking information to stdout.
 
