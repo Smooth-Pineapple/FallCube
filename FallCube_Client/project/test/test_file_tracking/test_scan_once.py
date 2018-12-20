@@ -1,72 +1,33 @@
 import pytest
 
-import os
+from pytest_mock import mocker
+from pyfakefs.fake_filesystem_unittest import Patcher
+
+from file_tracking.scan_once import ScanOnce
 
 @pytest.fixture
-def scan_once():
+def fake_filesystem(fs):
     """
-    Fixture to set valid rooms path, create BookingManager object and checks that booking a room for the first time is successful
-    """
-
-    from file_tracking.scan_once import ScanOnce
-
-    fake_input_dir_path = os.path.dirname(os.path.dirname(__file__)) + os.sep + 'fake_input_dir'
-    scan_once = ScanOnce(fake_input_dir_path, call_back)
-
-    return scan_once
-def call_back(self, event, dir, file, old_file = None):
-    """
-    Attempts to transfer files/ directories to server 
-    Input: 
-        event: type of file system event (created, modified, deleted, moved), and whether it applies to a file/ directory
-        dir: path to directory containing affected file/ directory  
-        file: file/ directory that is relevant to event
-        old_file: (optional) if renaming(moved) this will contain path to the old file/ directory(inc path)
+    Set up fake filesystem
     """
 
-    # Object to handle server communication
-    data_sender = DataSender(self.__host, self.__port)
-
-    try:
-        # Full path to affected file/ directory
-        to_file = dir + os.sep + file
-        if old_file:
-            # Append previous path to affected file/ directory(renaming)
-            to_file += '|' + old_file
-
-        # Message to send to server, format:
-            # [EVENT]|[FILE/DIRECTORY]|[PATH FROM MONITORED DIRECTORY TO FILE/ DIRECTORY]...also can have...|[PATH FROM MONITORED DIRECTORY TO OLD FILE/ DIRECTORY]
-        client_msg = event + "|" + to_file
-        print("Message to send to server:", client_msg)
-        
-        # Send message and wait for response
-        server_response = data_sender.notify(client_msg)
-        # If server is expecting to read file data, open local file and send data to server
-        if server_response == 'read':
-            file_to_parse = open(self.__base_dir + to_file, 'rb') 
-            data_sender.send_data(file_to_parse)
-            file_to_parse.close()
-
-    except FileNotFoundError as e:
-        print("File not found:", e)   
-    except socket.timeout as e:
-        print("Socket timeout:", e) 
-    except socket.error as e:
-        print("Error in socket connection:", e)    
-    except socket.gaierror as e:
-        print("Error with address:", e)         
-    except:
-        print("Unexpected error:", sys.exc_info()[0])         
-    finally:  
-        data_sender.close() # Explicitly close even though destructor will do it anyway           
+    fs.create_dir('PATH TO DIR/a/b')
+    fs.create_file('PATH TO DIR/f1.txt')
+    fs.create_file('PATH TO DIR/a/b/f2.txt')
 
 
-def test_successful_add_booking(booking_manager):
+    return fs
+
+def test_run_success(fake_filesystem, mocker):
     """
-    Checks that the booking to a room between bookings is succesful
+    Check that ScanOnce can correctly read files/ directories on file system
     """
 
-    booking_manager.add_booking('g1', {'start_day':1, 'end_day':1}, {'start_time':2, 'end_time':3})
-    
-    severe_failure, errMsg = booking_manager.add_booking('g1', {'start_day':1, 'end_day':1}, {'start_time':1, 'end_time':2})
-    assert severe_failure == False and errMsg == ""
+    mock_func = mocker.Mock()
+    scan_once = ScanOnce('PATH TO DIR', mock_func)
+    scan_once.run()
+
+    mock_func.assert_any_call('created|file', '', 'f1.txt')
+    mock_func.assert_any_call('created|dir', '\\a', 'b')
+    mock_func.assert_any_call('created|dir', '', 'a')
+    mock_func.assert_any_call('created|file', '\\a\\b', 'f2.txt')

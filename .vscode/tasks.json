@@ -6,7 +6,7 @@
         {
             "label": "Install dependencies",
             "type": "shell",
-            "command": "pip install watchdog && install pyinstaller && pip install pytest"
+            "command": "pip install watchdog && install pyinstaller && pip install pytest && pip install pyfakefs && pip install pytest-mock"
         },
         {
             "label": "Build All",
