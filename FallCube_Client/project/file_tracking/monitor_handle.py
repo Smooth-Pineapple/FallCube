@@ -11,13 +11,13 @@ class MonitorHandle(FileSystemEventHandler):
         self.__callBack = callBack
         self.__mod_times = {}
         
-    def __handle_event(self, isDir, eType, path_file, path_old_file = None):
+    def _handle_event(self, isDir, eType, path_file, path_old_file = None):
         """
         Handle file system events
         Input:
-            isDir: boolean representing if file/ directory
+            isDir: boolean representing input file/ directory
             eType: type of file system event (created, modified, deleted, moved)
-            path_file: path to file/ directory
+            path_file: path to file/ directory (including name)
             path_old_file: (optional) path to file/ directory (before renaming)
         """
 
@@ -40,14 +40,14 @@ class MonitorHandle(FileSystemEventHandler):
         self.__mod_times[path_file] = mod_time 
 
     def on_created(self, event): 
-        self.__handle_event(event.is_directory, event.event_type, event.src_path)
+        self._handle_event(event.is_directory, event.event_type, event.src_path)
         
     def on_deleted(self, event): 
-        self.__handle_event(event.is_directory, event.event_type, event.src_path)
+        self._handle_event(event.is_directory, event.event_type, event.src_path)
 
     def on_modified(self, event):
         if event.is_directory == False:
-            self.__handle_event(event.is_directory, event.event_type, event.src_path)
+            self._handle_event(event.is_directory, event.event_type, event.src_path)
 
     def on_moved(self, event):
-        self.__handle_event(event.is_directory, event.event_type, event.dest_path, event.src_path)
+        self._handle_event(event.is_directory, event.event_type, event.dest_path, event.src_path)

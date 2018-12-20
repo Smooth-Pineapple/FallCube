@@ -6,6 +6,8 @@ from pyfakefs.fake_filesystem_unittest import Patcher
 
 from file_transfer.file_transfer import FileTransfer
 
+import time
+
 @pytest.fixture
 def fake_filesystem(fs):
     """
@@ -14,111 +16,51 @@ def fake_filesystem(fs):
 
     fs.create_file('FAKE FILE.txt', contents='hello')
 
-import threading
-
-class ExcThread(threading.Thread):
-  def excRun(self):
-    sock = socket.socket()
-    sock.bind(('127.0.0.1', 12345))
-    sock.listen(5)
-    sock.timeout(10)
-    
-    client, _ = sock.accept()
-    data = client.recv(1024).decode()
-
-    if data == 'test|' + os.sep + 'FAKE FILE.txt':
-        client.send('read'.encode())
-        while data:
-            data = client.recv(1024)
-            if 1 == 1:
-                raise Exception('Expected FAKE FILE.txt to contain "Hello"')
-    elif data == 'test':
-         client.send('ok'.encode())   
-    else:
-        client.send('err'.encode()) # Will cause client to fail with OSError exception 
-
-    client.close()
-    sock.close()
-
-  def run(self):
-    self.exc = None
-    try:
-      # Possibly throws an exception
-      self.excRun()
-    except:
-      import sys
-      self.exc = sys.exc_info()
-      # Save details of the exception thrown but don't rethrow,
-      # just complete the function
-
-  def join(self):
-    threading.Thread.join(self)
-    if self.exc:
-      msg = "Thread '%s' threw an exception: %s" % (self.getName(), self.exc[1])
-      new_exc = Exception(msg)
-      raise new_exc.with_traceback(self.exc[2])
-
-def setup_socket(num_connections, time_out):
+def setup_socket():
     """
     Setup fake server
     """
-
-    sock = socket.socket()
-    sock.bind(('127.0.0.1', 12345))
-    sock.listen(num_connections)
-    sock.timeout(time_out)
     
-    client, _ = sock.accept()
-    print('ASDASDSA')
-    data = client.recv(1024).decode()
+    sock = socket.socket() 
+    sock.bind(('127.0.0.1', 12345)) 
+    sock.listen(5)
 
-    print('woiehrf')
-    if data == 'test|' + os.sep + 'FAKE FILE.txt':
-        print('AAAA')
-        client.send('read'.encode())
-    elif data == 'test read|' + os.sep + 'FAKE FILE.txt':
-        print('HELLO')
-        client.send('ok'.encode())  
-        print('WORLS')
-        while data:
-            data = client.recv(1024)
-        print('sAS')
+    client, _ = sock.accept()
+    data = client.recv(1024).decode()
+    
+    if data == 'test|handle response|' + os.sep + 'FAKE FILE.txt':
+        client.send('ok'.encode())
+    elif data == 'test|handle err silently|' + os.sep + 'FAKE FILE.txt':
+        client.send('err'.encode()) # Will cause client to fail with socket.error exception so test  should handle this exception 
     else:
-        print('ssssAS')
-        client.send('err'.encode()) # Will cause client to fail with OSError exception 
+        return
+    
 
     client.close()
     sock.close()
 
-
 def test_msg_success(fake_filesystem):
     """
-    Test simple successful connection
+    Test simple successful connection and receiving of message
     """
 
-    t = Thread(target=setup_socket, args=(5, 10))
+    t = Thread(target=setup_socket)
     t.start()
 
     file_transfer = FileTransfer('.', '127.0.0.1', 12345)
-    file_transfer.transfer('test', '', 'FAKE FILE.txt' )
+    file_transfer.transfer('test|handle response', '', 'FAKE FILE.txt' )
     
     t.join()
 
-
-def test_read_success():
+def test_error_handle(fake_filesystem):
     """
-    Test read and data transfer capabilities
+    Test quiet handling of error
     """
 
-    #t = Thread(target=setup_socket, args=(5, 10))
-    t = ExcThread()
+    t = Thread(target=setup_socket)
     t.start()
-    try:
-        file_transfer = FileTransfer('', '127.0.0.1', 12345)
-        file_transfer.transfer('test read', '', 'FAKE FILE.txt' )
-    except Exception as e:
-        raise pytest.fail(e)
 
-    
+    file_transfer = FileTransfer('', '127.0.0.1', 12345)
+    file_transfer.transfer('test|handle err silently', '', 'FAKE FILE.txt')
+
     t.join()
- 

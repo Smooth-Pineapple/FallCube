@@ -61,7 +61,7 @@ class FileTransfer():
         except socket.error as e:
             print("Error in socket connection:", e)    
         except socket.gaierror as e:
-            print("Error with address:", e)         
+            print("Error with address:", e)       
         except:
             print("Unexpected error:", sys.exc_info()[0])         
         finally:  

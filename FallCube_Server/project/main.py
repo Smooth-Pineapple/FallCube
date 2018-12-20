@@ -1,6 +1,5 @@
 import os
 import sys
-
 import signal
 
 from file_transfer.file_transfer import FileTransfer
@@ -35,7 +34,7 @@ def main():
 
         input('Socket is listening, enter any key to abort...\n')
     finally:
-        os.kill(pid, signal.SIGTERM)    
+        file_transfer.close()
 
     file_transfer.run()
     file_transfer.close()

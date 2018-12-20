@@ -99,7 +99,7 @@ class FileIOSync(Sync):
 
         # Get path to new file
         new_path = self.__download_dir + os.path.dirname(new)
-        # If this path contains non-existent directories make them
+        # If this path refers non-existent directories make them
         if not os.path.isdir(new_path):
             os.makedirs(new_path)
 

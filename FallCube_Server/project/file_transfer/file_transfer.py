@@ -75,7 +75,7 @@ class FileTransfer(Thread):
 
                         print("Renamed:", remote_file, "to:", new_name)  
         except OSError as e:
-            print("OSError error:", e)                   
+            print("OSError error but OK if you're closing the server!:", e)                   
         except socket.error as e:
             print("Error in socket connection:", e)
         except socket.gaierror as e:

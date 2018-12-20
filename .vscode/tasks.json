@@ -6,7 +6,7 @@
         {
             "label": "Install dependencies",
             "type": "shell",
-            "command": "pip install watchdog && install pyinstaller && pip install pytest && pip install pyfakefs && pip install pytest-mock"
+            "command": "pip install watchdog && pip install pyinstaller && pip install pytest && pip install pyfakefs && pip install pytest-mock"
         },
         {
             "label": "Build All",
@@ -27,18 +27,6 @@
                 "Run FallCube_Client",
                 "Run FallCube_Server"
             ]
-        },
-        {
-            "label": "Test All",
-            "type": "shell",
-            "dependsOn": [
-                "Test FallCube_Client",
-                "Test FallCube_Server"
-            ],
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            }
         },
         {
             "label": "Build FallCube_Client",
